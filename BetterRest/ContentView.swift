@@ -26,6 +26,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
+            
             Form {
                 VStack(alignment: .leading, spacing: 0) {
                     HeadTitle(text: "When do you want to wake up ?")
@@ -58,14 +59,18 @@ struct ContentView: View {
                                     }
             )
             .alert(isPresented: $showingAlert) {
-                Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("Ok")))
+                Alert(title: Text(alertTitle),
+                      message: Text(alertMessage),
+                      dismissButton: .default(Text("Ok")))
             }
             
         }
     }
     //MARK:- Logic
     private func calculateBedTime() {
-        let model = SleepCalculator()
+        guard let model = try? SleepCalculator(configuration: .init()) else {
+            return
+        }
         let wakeUpTime = getTimeInSeconds(wakeUp)
         
         do {

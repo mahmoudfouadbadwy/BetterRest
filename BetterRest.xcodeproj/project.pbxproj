@@ -58,11 +58,11 @@
 			children = (
 				3B3286DE2670D59700183969 /* BetterRestApp.swift */,
 				3B3286E02670D59700183969 /* ContentView.swift */,
+				3B3286FA2670EF2700183969 /* HeadTitle.swift */,
 				3B3286E22670D59C00183969 /* Assets.xcassets */,
 				3B3286E72670D59C00183969 /* Info.plist */,
 				3B3286F72670DEDF00183969 /* SleepCalculator.mlmodel */,
 				3B3286E42670D59C00183969 /* Preview Content */,
-				3B3286FA2670EF2700183969 /* HeadTitle.swift */,
 			);
 			path = BetterRest;
 			sourceTree = "<group>";
