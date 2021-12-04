@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    //MARK:- Properties
+    //MARK: - Properties
     @State private var wakeUp = defaultWakeTime
     @State private var sleepAmount = 8.0
     @State private var coffeAmount = 1
@@ -24,26 +24,33 @@ struct ContentView: View {
         return Calendar.current.date(from: component) ?? Date()
     }
     
+    //MARK: - UI
     var body: some View {
         NavigationView {
             
             Form {
-                VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading,
+                       spacing: 0) {
                     HeadTitle(text: "When do you want to wake up ?")
                     DatePicker("please enter a time ", selection: $wakeUp, displayedComponents: .hourAndMinute)
                         .labelsHidden()
                         .datePickerStyle(WheelDatePickerStyle())
                 }
-                VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading,
+                       spacing: 0) {
                     HeadTitle(text: "Desired amount of sleep")
-                    Stepper(value: $sleepAmount, in: 4...12, step: 0.25) {
+                    Stepper(value: $sleepAmount,
+                            in: 4...12,
+                            step: 0.25) {
                         Text("\(sleepAmount, specifier: "%g") hours")
                     }
                 }
                 
-                VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading,
+                       spacing: 0) {
                     HeadTitle(text: "Daily coffee intake")
-                    Stepper(value: $coffeAmount, in: 1...20) {
+                    Stepper(value: $coffeAmount,
+                            in: 1...20) {
                         if coffeAmount ==  1 {
                             Text("1 cup")
                         } else  {
@@ -53,26 +60,24 @@ struct ContentView: View {
                 }
             }
             .navigationBarTitle(Text("Better Rest"))
-            .navigationBarItems(trailing:
-                                    Button(action: calculateBedTime)  {
-                                        Text("Calculate")
-                                    }
+            .navigationBarItems(
+                trailing: Button(
+                    action: calculateBedTime) {
+                        Text("Calculate")
+                    }
             )
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text(alertTitle),
                       message: Text(alertMessage),
                       dismissButton: .default(Text("Ok")))
             }
-            
         }
     }
-    //MARK:- Logic
+    
+    //MARK: - Logic
     private func calculateBedTime() {
-        guard let model = try? SleepCalculator(configuration: .init()) else {
-            return
-        }
+        guard let model = try? SleepCalculator(configuration: .init()) else { return }
         let wakeUpTime = getTimeInSeconds(wakeUp)
-        
         do {
             let prediction = try model.prediction(wake: wakeUpTime,
                                                   estimatedSleep: sleepAmount,
