@@ -26,46 +26,36 @@ struct ContentView: View {
     
     //MARK: - UI
     var body: some View {
-        NavigationView {
+        
+        NavigationStack {
             
             Form {
-                VStack(alignment: .leading,
-                       spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
                     HeadTitle(text: "When do you want to wake up ?")
-                    DatePicker("please enter a time ", selection: $wakeUp, displayedComponents: .hourAndMinute)
-                        .labelsHidden()
-                        .datePickerStyle(WheelDatePickerStyle())
+                    DatePicker("please enter a time ", selection: $wakeUp,
+                               displayedComponents: .hourAndMinute)
+                    .labelsHidden()
+                    .datePickerStyle(WheelDatePickerStyle())
                 }
-                VStack(alignment: .leading,
-                       spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
                     HeadTitle(text: "Desired amount of sleep")
-                    Stepper(value: $sleepAmount,
+                    Stepper("\(sleepAmount.formatted()) hours",
+                            value: $sleepAmount,
                             in: 4...12,
-                            step: 0.25) {
-                        Text("\(sleepAmount, specifier: "%g") hours")
-                    }
+                            step: 0.25)
                 }
                 
-                VStack(alignment: .leading,
-                       spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
                     HeadTitle(text: "Daily coffee intake")
-                    Stepper(value: $coffeAmount,
-                            in: 1...20) {
-                        if coffeAmount ==  1 {
-                            Text("1 cup")
-                        } else  {
-                            Text("\(coffeAmount) cups")
-                        }
-                    }
+                    Stepper(coffeAmount == 1 ? "1 cup" : "\(coffeAmount) cup(s)",
+                            value: $coffeAmount,
+                            in: 1...20)
                 }
             }
-            .navigationBarTitle(Text("Better Rest"))
-            .navigationBarItems(
-                trailing: Button(
-                    action: calculateBedTime) {
-                        Text("Calculate")
-                    }
-            )
+            .navigationTitle("BetterRest")
+            .toolbar {
+                Button("Calculate", action: calculateBedTime)
+            }
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text(alertTitle),
                       message: Text(alertMessage),
@@ -104,7 +94,7 @@ struct ContentView: View {
         return Double(hour + minute)
     }
     
-    private func getSleepTime(_ actualSleep: Double) -> String{
+    private func getSleepTime(_ actualSleep: Double) -> String {
         let sleepTime = wakeUp - actualSleep
         let formatter = DateFormatter()
         formatter.timeStyle = .short
